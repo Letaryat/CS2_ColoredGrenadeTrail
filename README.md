@@ -13,3 +13,8 @@ particles/weapons/cs_weapon_fx/bumpmine_active.vpcf_c
 particles/water_fx/waterfall_base.vpcf
 particles/money_fx/moneybag_trail.vpcf_c
 ```
+
+I would like to thanks my Mom, Dad, my cat and also guys from CSS discord who helped me to figure this out:
+- Exkludera,
+- Prefix,
+- KeePassXC
