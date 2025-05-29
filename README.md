@@ -18,7 +18,7 @@ particles/water_fx/waterfall_base.vpcf
 particles/money_fx/moneybag_trail.vpcf_c
 ```
 
-I would like to thanks my Mom, Dad, my cat and most importantly guys from CSS discord who helped me to figure this out:
+I would like to thank my Mom, Dad, my cat and most importantly guys from CSS discord who helped me to figure this out:
 - Exkludera,
 - Prefix,
 - KeePassXC
