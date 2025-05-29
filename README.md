@@ -1,6 +1,6 @@
 # CS2_GrenadeTrail
 > [!CAUTION]
-> Plugin is not created for actual "use".
+> Plugin is not intended for actual "use".
 
 
 Plugin that creates a nade trail after HE Grenade is thrown. To use this plugin you need to create special addon with TrailModel which is located in TrailModel/ in this repository. Then change Model path in plugin.<br>
