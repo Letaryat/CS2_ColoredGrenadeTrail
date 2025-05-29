@@ -4,7 +4,7 @@
 
 
 Plugin that creates a nade trail after HE Grenade is thrown. To use this plugin you need to create special addon with TrailModel which is located in TrailModel/ in this repository. Then change Model path in plugin.<br>
-As there are a lot of plugins that create trail effect, I thought about creating a particle based on already existing one made by Valve (particles/ui/hud/ui_map_def_utility_trail.vpcf) which colors could be changed via C#, since there are not many "useful" ones in the game or provided for free (or at least I cannot find anything). Plugin is an example how to change colors via C# of this particular particle.<br>
+As there are a lot of plugins that create trail effect, I thought about creating a particle based on already existing one made by Valve (particles/ui/hud/ui_map_def_utility_trail.vpcf). This version of that particle allows server owners / developers to change colors via C#. Since there are not many "useful" particles in the game or provided for free (or at least I cannot find anything). Plugin is an example how to change colors via C# of this particular particle.<br>
 
 <p align="center">
     <img src="image/pic.jpg" width="500">
