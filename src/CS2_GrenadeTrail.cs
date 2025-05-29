@@ -41,6 +41,9 @@ public class CS2_GrenadeTrail : BasePlugin
 
     public void CreateNadeTrail(Vector start, CBaseCSGrenadeProjectile grenade)
     {
+        // Also inspired ( ͡° ͜ʖ ͡°) by: 
+        // https://github.com/ipsvn/ChaseMod/blob/c2c003598aeb7d950a61872942fff89fcc21f553/NadeManager.cs#L149
+        
         CParticleSystem particle = Utilities.CreateEntityByName<CParticleSystem>("info_particle_system")!;
 
         particle.EffectName = Model;
