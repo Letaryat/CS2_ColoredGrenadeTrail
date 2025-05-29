@@ -11,13 +11,20 @@ public class TestPlugin : BasePlugin
     public override string ModuleName => "Hello World Plugin";
 
     public override string ModuleVersion => "0.0.1";
-    public record struct BeamTrack(Vector LastPos, CBeam Beam);
+    public record struct BeamTrack(Vector LastPos, CDynamicProp Beam);
 
+    public string Model = "particles/ui/hud/ui_map_def_utility_trail.vpcf";
+    //public string Model = "materials/sprites/laserbeam.vtex";
     public Dictionary<CBaseCSGrenadeProjectile, BeamTrack> Grenades { get; set; } = [];
 
     public override void Load(bool hotReload)
     {
         Console.WriteLine("Hello World!");
+
+        RegisterListener<Listeners.OnServerPrecacheResources>((ResourceManifest manifest) =>
+            {
+                manifest.AddResource(Model);
+            });
 
         RegisterListener<Listeners.OnEntityCreated>((entity) =>
         {
@@ -29,33 +36,9 @@ public class TestPlugin : BasePlugin
                 Server.PrintToChatAll("Rzucam nade!");
                 var player = grenade.Thrower.Value?.Controller.Value;
                 if (player == null) return;
-
-                CBeam beam = Utilities.CreateEntityByName<CEnvBeam>("beam")!;
-                if (beam == null) return;
+                CreateBeamBetweenPoints(grenade.AbsOrigin!, grenade.AbsOrigin!, grenade);
 
 
-
-
-                CreateBeamBetweenPoints(grenade.AbsOrigin!, grenade.AbsOrigin!);
-                Grenades[grenade] = new BeamTrack(grenade.AbsOrigin!, beam);
-                /*
-                beam.Render = Color.FromName("Green");
-                beam.Width = 5;
-
-
-
-                beam.Flags = 1 << 8;
-                beam.BeamFlags = 1 << 8;
-
-                beam.LifeState = 1;
-
-                beam.Teleport(player.AbsOrigin);
-                //beam.EndPos.Add(grenade.AbsOrigin!);
-
-                Grenades[grenade] = new BeamTrack(grenade.AbsOrigin!, beam);
-
-                beam.DispatchSpawn();
-                */
             });
         });
 
@@ -65,7 +48,7 @@ public class TestPlugin : BasePlugin
             {
                 CBaseCSGrenadeProjectile grenade = nades.Key;
                 var track = nades.Value;
-                CBeam beam = nades.Value.Beam;
+                CDynamicProp beam = nades.Value.Beam;
                 if (!grenade.IsValid)
                 {
                     if (beam.IsValid)
@@ -78,58 +61,56 @@ public class TestPlugin : BasePlugin
 
                 var currentPos = grenade.AbsOrigin;
 
-                
 
-                CreateBeamBetweenPoints(track.LastPos, currentPos!);
-                /*
-                beam.Teleport(track.LastPos);
-                beam.EndPos.Add(currentPos!);
-                */
-                Grenades[grenade] = new BeamTrack(currentPos!, track.Beam);
+
+                CreateBeamBetweenPoints(track.LastPos, currentPos!, grenade);
             }
         });
 
     }
 
-    public void CreateBeamBetweenPoints(Vector start, Vector end)
+
+    public void CreateBeamBetweenPoints(Vector start, Vector end, CBaseCSGrenadeProjectile grenade)
     {
-        CBeam? beam = Utilities.CreateEntityByName<CBeam>("beam");
+        CParticleSystem particle = Utilities.CreateEntityByName<CParticleSystem>("info_particle_system")!;
 
-        if (beam == null)
-        {
-            return;
-        }
+        particle.EffectName = Model;
 
-        beam.Render = Color.Lime;
-        beam.Width = 5;
+        particle.Tint = Color.AliceBlue;
+
+        Utilities.SetStateChanged(particle, "CParticleSystem", "m_clrTint");
+
+        particle.Teleport(start);
+        particle.DispatchSpawn();
+
+        particle.AcceptInput("SetParent", grenade, particle, "!activator");
+        particle.AcceptInput("Start");
+
+    }
+
+    /*
+    public void CreateBeamBetweenPoints(Vector start, Vector end, CBaseCSGrenadeProjectile grenade)
+    {
+        CDynamicProp? particle = Utilities.CreateEntityByName<CDynamicProp>("prop_dynamic");
+        Grenades[grenade] = new BeamTrack(start, particle!);
 
 
-
-        //beam.EndWidth = 3.0f;
-
-        beam.Teleport(start);
-
-        beam.EndPos.X = end.X;
-        beam.EndPos.Y = end.Y;
-        beam.EndPos.Z = end.Z;
+        particle!.SetModel(Model);
+        //particle.EffectName = Model;
+        particle.DispatchSpawn();
+        particle.Teleport(start, new QAngle(), new Vector());
+        //particle.AcceptInput("Start");
 
         //beam.DispatchSpawn();
+        /*
         AddTimer(20.0f, () =>
         {
             if (beam.IsValid) beam.AcceptInput("Kill");
         });
+    
 
     }
-
-    public static Vector Lerp(Vector a, Vector b, float t)
-{
-    return new Vector
-    {
-        X = a.X + (b.X - a.X) * t,
-        Y = a.Y + (b.Y - a.Y) * t,
-        Z = a.Z + (b.Z - a.Z) * t
-    };
-}
+        */
 
 }
 
