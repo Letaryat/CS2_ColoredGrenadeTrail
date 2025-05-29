@@ -1,6 +1,6 @@
 # CS2_GrenadeTrail
 > [!CAUTION]
-> Plugin is not intended for actual "use".
+> Plugin is not intended for actual "use". It is more of a showcase that we can make custom particles that can be colored using C#.
 
 
 Plugin that creates a nade trail after HE Grenade is thrown. To use this plugin you need to create special addon with TrailModel which is located in TrailModel/ in this repository. Then change Model path in plugin.<br>
