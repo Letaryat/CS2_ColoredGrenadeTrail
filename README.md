@@ -22,3 +22,5 @@ I would like to thank my Mom, Dad, my cat and most importantly guys from CSS dis
 - Exkludera,
 - Prefix,
 - KeePassXC
+- Schwarper and his CS2-Store,
+- ipsvn and his ChaseMod
