@@ -18,11 +18,15 @@ public class CS2_GrenadeTrail : BasePlugin
 
         RegisterListener<Listeners.OnServerPrecacheResources>((ResourceManifest manifest) =>
         {
-                manifest.AddResource(Model);
+            manifest.AddResource(Model);
         });
 
         RegisterListener<Listeners.OnEntityCreated>((entity) =>
         {
+            // As far as I remember this listener was inspired (probably copied 1:1 lol) from: 
+            // github.com/schwarper/cs2-store/blob/main/Store/src/item/items/grenadetrail.cs
+            // Trail should work also with other types of grenades
+
             if (entity.DesignerName != "hegrenade_projectile") return;
             CBaseCSGrenadeProjectile grenade = new(entity.Handle);
             if (grenade.Handle == IntPtr.Zero) return;
@@ -30,12 +34,12 @@ public class CS2_GrenadeTrail : BasePlugin
             {
                 var player = grenade.Thrower.Value?.Controller.Value;
                 if (player == null) return;
-                CreateNadeTrail(grenade.AbsOrigin!, grenade.AbsOrigin!, grenade);
+                CreateNadeTrail(grenade.AbsOrigin!, grenade);
             });
         });
     }
 
-    public void CreateNadeTrail(Vector start, Vector end, CBaseCSGrenadeProjectile grenade)
+    public void CreateNadeTrail(Vector start, CBaseCSGrenadeProjectile grenade)
     {
         CParticleSystem particle = Utilities.CreateEntityByName<CParticleSystem>("info_particle_system")!;
 
