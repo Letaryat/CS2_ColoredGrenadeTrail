@@ -13,8 +13,8 @@ public class TestPlugin : BasePlugin
     public override string ModuleVersion => "0.0.1";
     public record struct BeamTrack(Vector LastPos, CDynamicProp Beam);
 
-    public string Model = "particles/ui/hud/ui_map_def_utility_trail.vpcf";
-    //public string Model = "materials/sprites/laserbeam.vtex";
+    //public string Model = "particles/ui/hud/ui_map_def_utility_trail.vpcf";
+    public string Model = "particles/explosions_fx/bumpmine_detonate_sparks.vpcf";
     public Dictionary<CBaseCSGrenadeProjectile, BeamTrack> Grenades { get; set; } = [];
 
     public override void Load(bool hotReload)
@@ -76,15 +76,22 @@ public class TestPlugin : BasePlugin
 
         particle.EffectName = Model;
 
-        particle.Tint = Color.AliceBlue;
 
-        Utilities.SetStateChanged(particle, "CParticleSystem", "m_clrTint");
+        //particle.Tint = Color.AliceBlue;
+
+
+        //Utilities.SetStateChanged(particle, "CParticleSystem", "m_clrTint");
+        particle.DispatchSpawn();
 
         particle.Teleport(start);
-        particle.DispatchSpawn();
+        
 
         particle.AcceptInput("SetParent", grenade, particle, "!activator");
         particle.AcceptInput("Start");
+
+
+
+
 
     }
 
