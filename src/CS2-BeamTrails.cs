@@ -2,6 +2,7 @@
 using System.Security.Cryptography.X509Certificates;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Commands.Targeting;
 using CounterStrikeSharp.API.Modules.Utils;
 
 namespace TestPlugin;
@@ -23,6 +24,8 @@ public class TestPlugin : BasePlugin
         {
             if (entity.DesignerName != "hegrenade_projectile") return;
             CBaseCSGrenadeProjectile grenade = new(entity.Handle);
+            CParticleSystem beam = Utilities.CreateEntityByName<CParticleSystem>("info_particle_system")!;
+            //CBeam beam = Utilities.CreateEntityByName<CEnvBeam>("beam")!;
             if (grenade.Handle == IntPtr.Zero) return;
             Server.NextFrame(() =>
             {
@@ -30,90 +33,74 @@ public class TestPlugin : BasePlugin
                 var player = grenade.Thrower.Value?.Controller.Value;
                 if (player == null) return;
 
-                CBeam beam = Utilities.CreateEntityByName<CEnvBeam>("beam")!;
-                if (beam == null) return;
 
-
-
-
-                CreateBeamBetweenPoints(grenade.AbsOrigin!, grenade.AbsOrigin!);
-                Grenades[grenade] = new BeamTrack(grenade.AbsOrigin!, beam);
-                /*
-                beam.Render = Color.FromName("Green");
-                beam.Width = 5;
-
-
-
-                beam.Flags = 1 << 8;
-                beam.BeamFlags = 1 << 8;
-
-                beam.LifeState = 1;
-
-                beam.Teleport(player.AbsOrigin);
-                //beam.EndPos.Add(grenade.AbsOrigin!);
-
-                Grenades[grenade] = new BeamTrack(grenade.AbsOrigin!, beam);
-
-                beam.DispatchSpawn();
-                */
+                CreateBeamBetweenPoints(grenade.AbsOrigin!, grenade.AbsOrigin!, grenade);
             });
         });
 
         RegisterListener<Listeners.OnTick>(() =>
         {
-            foreach (var nades in Grenades)
+            foreach (var nades in Grenades.ToList())
             {
                 CBaseCSGrenadeProjectile grenade = nades.Key;
                 var track = nades.Value;
-                CBeam beam = nades.Value.Beam;
+
                 if (!grenade.IsValid)
                 {
-                    if (beam.IsValid)
+                    if (track.Beam.IsValid)
                     {
-                        beam.Remove();
+                        track.Beam.Remove();
                     }
                     Grenades.Remove(grenade);
                     continue;
                 }
 
-                var currentPos = grenade.AbsOrigin;
-
-                
-
-                CreateBeamBetweenPoints(track.LastPos, currentPos!);
+                var currentPos = grenade.AbsOrigin!;
+                int segmentCount = 10; // więcej = bardziej gładkie
                 /*
-                beam.Teleport(track.LastPos);
-                beam.EndPos.Add(currentPos!);
+                for (int i = 0; i < segmentCount; i++)
+                {
+                    float t1 = i / (float)segmentCount;
+                    float t2 = (i + 1) / (float)segmentCount;
+                    var start = Lerp(track.LastPos, currentPos, t1);
+                    var end = Lerp(track.LastPos, currentPos, t2);
+                    CreateBeamBetweenPoints(start, end, grenade);
+                }
                 */
-                Grenades[grenade] = new BeamTrack(currentPos!, track.Beam);
+                CreateBeamBetweenPoints(currentPos, grenade.AbsOrigin!, grenade);
+
+
             }
         });
 
+
     }
 
-    public void CreateBeamBetweenPoints(Vector start, Vector end)
+    public void CreateBeamBetweenPoints(Vector start, Vector end, CBaseCSGrenadeProjectile grenade)
     {
-        CBeam? beam = Utilities.CreateEntityByName<CBeam>("beam");
-
+        CBeam? beam = Utilities.CreateEntityByName<CBeam>("env_beam")!;
+        Grenades[grenade] = new BeamTrack(start, beam);
         if (beam == null)
         {
             return;
         }
 
+        //beam.StartEntity = grenade.AbsOrigin;
+        
         beam.Render = Color.Lime;
         beam.Width = 5;
-
-
 
         //beam.EndWidth = 3.0f;
 
         beam.Teleport(start);
 
+        
         beam.EndPos.X = end.X;
         beam.EndPos.Y = end.Y;
         beam.EndPos.Z = end.Z;
+        
+        beam.DispatchSpawn();
 
-        //beam.DispatchSpawn();
         AddTimer(20.0f, () =>
         {
             if (beam.IsValid) beam.AcceptInput("Kill");
