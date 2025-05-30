@@ -15,10 +15,16 @@ public class CS2_GrenadeTrail : BasePlugin
     private readonly string[] projectiles = ["hegrenade_projectile", "flashbang_projectile", "smokegrenade_projectile", "decoy_projectile", "molotov_projectile"];
 
     private readonly string[] modelParticles = [
+        "particles/letaryat/testparticlecolor.vpcf",
+        "particles/letaryat/grenadeTrailBrokenColors.vpcf",
+        "particles/letaryat/grenadeLaserSoftTrail.vpcf",
+        "particles/letaryat/grenadeCrackTrail.vpcf"
+        /*
         "particles/letaryat/grenadeTrail.vpcf",
         "particles/letaryat/grenadeTrailBrokenColors.vpcf",
         "particles/letaryat/grenadeLaserSoftTrail.vpcf",
         "particles/letaryat/grenadeCrackTrail.vpcf"
+    */
     ];
 
     private int modelToUse = 0;
@@ -82,14 +88,14 @@ public class CS2_GrenadeTrail : BasePlugin
         if (player == null) return;
         var pawn = player.PlayerPawn.Value;
         if (pawn == null || !pawn.IsValid) return;
-        
-        Random random = new Random();
-        int a = random.Next(0, 256);
-        int r = random.Next(0, 256); 
-        int g = random.Next(0, 256); 
-        int b = random.Next(0, 256); 
 
-        TrailColor = Color.FromArgb(a, r, g, b);
+        Random random = new Random();
+        //int a = random.Next(0, 256);
+        int r = random.Next(0, 256);
+        int g = random.Next(0, 256);
+        int b = random.Next(0, 256);
+
+        TrailColor = Color.FromArgb(r, g, b, 255);
         Server.PrintToChatAll($"Changed color to: {TrailColor}");
     }
 
