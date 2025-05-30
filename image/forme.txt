@@ -1,0 +1,4 @@
+        "particles/letaryat/testparticlecolor.vpcf",
+        "particles/letaryat/testparticle.vpcf",
+        "particles/letaryat/beamcracktrail.vpcf",
+        "particles/letaryat/beamlasersofttrail.vpcf"
