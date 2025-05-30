@@ -18,7 +18,9 @@ public class CS2_GrenadeTrail : BasePlugin
         "particles/letaryat/grenadeTrail.vpcf",
         "particles/letaryat/grenadeTrailBrokenColors.vpcf",
         "particles/letaryat/grenadeLaserSoftTrail.vpcf",
-        "particles/letaryat/grenadeCrackTrail.vpcf"
+        "particles/letaryat/grenadeCrackTrail.vpcf",
+        "particles/letaryat/grenadeelectric.vpcf",
+        "particles/letaryat/grenadewater.vpcf"
     ];
 
     private int modelToUse = 0;
