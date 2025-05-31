@@ -2,6 +2,7 @@
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Commands;
+using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
 using CounterStrikeSharp.API.Modules.Utils;
 
 namespace CS2_GrenadeTrail;
@@ -32,6 +33,10 @@ public class CS2_GrenadeTrail : BasePlugin
     private int modelToUse = 0;
 
     private Color TrailColor = Color.FromArgb(255, 87, 216, 128);
+
+    //ty k4ryuu
+    public static MemoryFunctionWithReturn<CParticleSystem, int, Vector, bool> SetControlPointValue { get; }
+            = new("55 48 89 E5 41 57 41 56 41 55 49 89 D5 31 D2 41 54 41 89 F4");
 
     public override void Load(bool hotReload)
     {
@@ -133,7 +138,6 @@ public class CS2_GrenadeTrail : BasePlugin
         Vector direction = endPos - start;
         float length = MathF.Sqrt(direction.X * direction.X + direction.Y * direction.Y + direction.Z * direction.Z);
 
-        // Zabezpieczenie przed dzieleniem przez 0
         if (length != 0)
         {
             direction.X /= length;
@@ -141,16 +145,21 @@ public class CS2_GrenadeTrail : BasePlugin
             direction.Z /= length;
         }
 
-        direction *= 500.0f; // Skala prędkości
+        direction *= 500.0f;
 
         var particle = Utilities.CreateEntityByName<CParticleSystem>("info_particle_system")!;
 
         particle.EffectName = modelParticles[modelToUse];
         particle.Teleport(start);
 
+        SetControlPointValue.Invoke(particle, 0, start);
+        SetControlPointValue.Invoke(particle, 2, direction);
+
+
+        /*
         particle.DataCP = 2;
         particle.DataCPValue.X = direction.X; particle.DataCPValue.Y = direction.Y; particle.DataCPValue.Z = direction.Z;
-
+        */
         particle.TintCP = 1;
         particle.Tint = TrailColor;
         particle.StartActive = true;
