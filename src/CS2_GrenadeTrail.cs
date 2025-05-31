@@ -20,7 +20,13 @@ public class CS2_GrenadeTrail : BasePlugin
         "particles/letaryat/grenadeLaserSoftTrail.vpcf",
         "particles/letaryat/grenadeCrackTrail.vpcf",
         "particles/letaryat/grenadeelectric.vpcf",
-        "particles/letaryat/grenadewater.vpcf"
+        "particles/letaryat/grenadewater.vpcf",
+        "particles/letaryat/bullettracer.vpcf",
+        "particles/letaryat/bullettracerdwa.vpcf",
+        "particles/letaryat/bullettracertrzy.vpcf", //8
+        "particles/letaryat/bullettracercztiry.vpcf",
+        "particles/letaryat/bullettracerpinc.vpcf",
+        "particles/letaryat/bullettracerszes.vpcf",
     ];
 
     private int modelToUse = 0;
@@ -32,15 +38,18 @@ public class CS2_GrenadeTrail : BasePlugin
         Console.WriteLine("CS2-GrenadeTrail Color Loaded");
 
         AddCommand("css_randomTrailColor", "Sets random color of trail", OnRandomColor);
-        AddCommand("css_changeParticle", "Set trail model to argument (int)", OnChangeParticle);
+        AddCommand("css_particle", "Set trail model to argument (int)", OnChangeParticle);
 
+        //Listeners:
         RegisterListener<Listeners.OnServerPrecacheResources>((ResourceManifest manifest) =>
         {
             foreach (var particles in modelParticles)
             {
                 manifest.AddResource(particles);
             }
+            manifest.AddResource("models/chicken/chicken.vmdl");
         });
+
 
         RegisterListener<Listeners.OnEntityCreated>((entity) =>
         {
@@ -57,8 +66,12 @@ public class CS2_GrenadeTrail : BasePlugin
                 CreateNadeTrail(grenade.AbsOrigin!, grenade);
             });
         });
+
+        //Events:
+        RegisterEventHandler<EventBulletImpact>(OnBulletImpact);
     }
 
+    //Methods:
     public void CreateNadeTrail(Vector start, CBaseGrenade grenade)
     {
         // Also inspired ( ͡° ͜ʖ ͡°) by: 
@@ -78,7 +91,76 @@ public class CS2_GrenadeTrail : BasePlugin
         particle.AcceptInput("Start");
     }
 
+    public Vector CalculateRJ(Vector playerPos, Vector bulletPos)
+    {
+        var distanceVector = new Vector
+        {
+            X = playerPos.X - bulletPos.X,
+            Y = playerPos.Y - bulletPos.Y,
+            Z = playerPos.Z - bulletPos.Z
+        };
+        float distance = (float)Math.Sqrt(
+            distanceVector.X * distanceVector.X +
+            distanceVector.Y * distanceVector.Y +
+            distanceVector.Z * distanceVector.Z
+        );
+        var normalizedDirection = new Vector
+        {
+            X = distanceVector.X / distance,
+            Y = distanceVector.Y / distance,
+            Z = distanceVector.Z / distance
+        };
+        return new Vector
+        {
+            X = normalizedDirection.X,
+            Y = normalizedDirection.Y,
+            Z = normalizedDirection.Z
+        };
+    }
 
+    //Exkludera bullet impact:
+    public static Vector GetEyePosition(CCSPlayerController player)
+    {
+        Vector absorigin = player.PlayerPawn.Value!.AbsOrigin!;
+        CPlayer_CameraServices camera = player.PlayerPawn.Value!.CameraServices!;
+
+        return new Vector(absorigin.X, absorigin.Y, absorigin.Z + camera.OldPlayerViewOffsetZ);
+    }
+
+    public void CreateParticleBullet(Vector endPos, Vector start)
+    {
+
+        Vector direction = endPos - start;
+        float length = MathF.Sqrt(direction.X * direction.X + direction.Y * direction.Y + direction.Z * direction.Z);
+
+        // Zabezpieczenie przed dzieleniem przez 0
+        if (length != 0)
+        {
+            direction.X /= length;
+            direction.Y /= length;
+            direction.Z /= length;
+        }
+
+        direction *= 500.0f; // Skala prędkości
+
+        var particle = Utilities.CreateEntityByName<CParticleSystem>("info_particle_system")!;
+
+        particle.EffectName = modelParticles[modelToUse];
+        particle.Teleport(start);
+
+        particle.DataCP = 2;
+        particle.DataCPValue.X = direction.X; particle.DataCPValue.Y = direction.Y; particle.DataCPValue.Z = direction.Z;
+
+        particle.TintCP = 1;
+        particle.Tint = TrailColor;
+        particle.StartActive = true;
+
+        particle.DispatchSpawn();
+
+        particle.AcceptInput("Start");
+    }
+
+    //Commands:
     private void OnRandomColor(CCSPlayerController? player, CommandInfo commandInfo)
     {
         if (player == null) return;
@@ -104,6 +186,26 @@ public class CS2_GrenadeTrail : BasePlugin
         var id = Convert.ToInt32(commandInfo.GetArg(1));
         modelToUse = id;
         player.PrintToChat($"Changed to: {modelParticles[id]}");
+    }
+
+    //Events:
+
+    private HookResult OnBulletImpact(EventBulletImpact @event, GameEventInfo info)
+    {
+        var bullet = @event;
+        var player = @event.Userid;
+        if (player == null) return HookResult.Continue;
+        var pawn = player.PlayerPawn.Value;
+        if (pawn == null || !pawn.IsValid) return HookResult.Continue;
+
+        Vector startPos = GetEyePosition(player);
+        Vector endPos = new Vector(bullet.X, bullet.Y, bullet.Z);
+
+        Server.PrintToChatAll($"Bullet impact: {endPos}");
+
+        CreateParticleBullet(endPos, startPos);
+
+        return HookResult.Continue;
     }
 
 }
