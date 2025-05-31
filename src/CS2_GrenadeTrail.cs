@@ -29,7 +29,8 @@ public class CS2_GrenadeTrail : BasePlugin
         "particles/letaryat/bullettracerpinc.vpcf",
         "particles/letaryat/bullettracerszes.vpcf", // 11
         "particles/letaryat/bullettracerosiedem.vpcf",
-        "particles/letaryat/bullettracerosiem.vpcf"
+        "particles/letaryat/bullettracerosiem.vpcf", // 13
+        "particles/letaryat/bullettrail.vpcf",
     ];
 
     private int modelToUse = 0;
