@@ -27,7 +27,9 @@ public class CS2_GrenadeTrail : BasePlugin
         "particles/letaryat/bullettracertrzy.vpcf", //8
         "particles/letaryat/bullettracercztiry.vpcf",
         "particles/letaryat/bullettracerpinc.vpcf",
-        "particles/letaryat/bullettracerszes.vpcf",
+        "particles/letaryat/bullettracerszes.vpcf", // 11
+        "particles/letaryat/bullettracerosiedem.vpcf",
+        "particles/letaryat/bullettracerosiem.vpcf"
     ];
 
     private int modelToUse = 0;
@@ -134,7 +136,12 @@ public class CS2_GrenadeTrail : BasePlugin
 
     public void CreateParticleBullet(Vector endPos, Vector start)
     {
-
+        /*
+        Control Point = 4 - LifeTime
+        Control Point = 5 - Start
+        Control Point = 6 - End
+        */
+        /*
         Vector direction = endPos - start;
         float length = MathF.Sqrt(direction.X * direction.X + direction.Y * direction.Y + direction.Z * direction.Z);
 
@@ -144,16 +151,16 @@ public class CS2_GrenadeTrail : BasePlugin
             direction.Y /= length;
             direction.Z /= length;
         }
-
+        
         direction *= 500.0f;
-
+        */
         var particle = Utilities.CreateEntityByName<CParticleSystem>("info_particle_system")!;
 
         particle.EffectName = modelParticles[modelToUse];
         particle.Teleport(start);
 
-        SetControlPointValue.Invoke(particle, 0, start);
-        SetControlPointValue.Invoke(particle, 2, direction);
+        SetControlPointValue.Invoke(particle, 5, start);
+        SetControlPointValue.Invoke(particle, 6, endPos);
 
 
         /*
