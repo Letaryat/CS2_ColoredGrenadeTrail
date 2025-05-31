@@ -77,7 +77,9 @@ public class CS2_GrenadeTrail : BasePlugin
 
         //Events:
         RegisterEventHandler<EventBulletImpact>(OnBulletImpact);
+        RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawn);
     }
+
 
     //Methods:
     public void CreateNadeTrail(Vector start, CBaseGrenade grenade)
@@ -98,6 +100,27 @@ public class CS2_GrenadeTrail : BasePlugin
         particle.AcceptInput("SetParent", grenade, particle, "!activator");
         particle.AcceptInput("Start");
     }
+
+    public void CreatePathTrail(Vector start, CCSPlayerController player)
+    {
+        // Also inspired ( ͡° ͜ʖ ͡°) by: 
+        // https://github.com/ipsvn/ChaseMod/blob/c2c003598aeb7d950a61872942fff89fcc21f553/NadeManager.cs#L149
+
+        CParticleSystem particle = Utilities.CreateEntityByName<CParticleSystem>("info_particle_system")!;
+
+        particle.EffectName = modelParticles[modelToUse];
+        particle.Teleport(start, QAngle.Zero, Vector.Zero);
+
+        particle.TintCP = 1;
+        particle.Tint = TrailColor;
+        particle.StartActive = true;
+        particle.DispatchSpawn();
+
+        particle.AcceptInput("Start");
+        particle.AcceptInput("SetParent", player.PlayerPawn.Value, particle, "!activator");
+
+    }
+
 
     public Vector CalculateRJ(Vector playerPos, Vector bulletPos)
     {
@@ -225,4 +248,15 @@ public class CS2_GrenadeTrail : BasePlugin
         return HookResult.Continue;
     }
 
+    
+    private HookResult OnPlayerSpawn(EventPlayerSpawn @event, GameEventInfo info)
+    {
+        var player = @event.Userid;
+        if (player == null) return HookResult.Continue;
+        var pawn = player.PlayerPawn.Value;
+        if (pawn == null || !pawn.IsValid) return HookResult.Continue;
+        var startPos = pawn.AbsOrigin;
+        CreatePathTrail(startPos!, player);
+        return HookResult.Continue;
+    }
 }
