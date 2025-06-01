@@ -1,4 +1,5 @@
 bin/
 obj/
+.vs/
 CS2-NadeBeamTrails.sln
 CS2_GrenadeTrail.sln
