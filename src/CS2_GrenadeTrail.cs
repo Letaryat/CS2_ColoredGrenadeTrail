@@ -11,9 +11,9 @@ namespace CS2_GrenadeTrail;
 
 public class CS2_GrenadeTrail : BasePlugin
 {
-    public override string ModuleName => "CS2-GrenadeTrail Color";
+    public override string ModuleName => "CS2-CustomTrailAndTracers Colored";
 
-    public override string ModuleVersion => "0.0.2";
+    public override string ModuleVersion => "0.0.3";
     public override string ModuleAuthor => "Letaryat | https://github.com/Letaryat";
     public readonly string[] projectiles = ["hegrenade_projectile", "flashbang_projectile", "smokegrenade_projectile", "decoy_projectile", "molotov_projectile"];
 
@@ -27,12 +27,13 @@ public class CS2_GrenadeTrail : BasePlugin
     ];
 
     public readonly string[] tracerParticles = [
-        "particles/letaryat/bullettrail.vpcf",
-        "particles/letaryat_tracers/bullet_tracer1.vpcf",
-        "particles/letaryat_tracers/bullet_tracer_crack.vpcf",
-        "particles/letaryat_tracers/bullet_tracer_electric.vpcf",
-        "particles/letaryat_tracers/bullet_tracer_water.vpcf",
+        "particles/letaryat_tracers/bullet_tracer.vpcf",
+        "particles/letaryat_tracers/bullet_tracer1.vpcf", 
+        "particles/letaryat_tracers/bullet_tracer_crack.vpcf", 
+        "particles/letaryat_tracers/bullet_tracer_electric.vpcf", 
+        "particles/letaryat_tracers/bullet_tracer_water.vpcf", 
         "particles/letaryat_tracers/bullettracerosiem.vpcf",
+        "particles/letaryat_tracers/bullet_tracer_electricradius.vpcf",
     ];
     public int modelToUse = 0;
     public int tracerToUse = 0;
@@ -46,7 +47,7 @@ public class CS2_GrenadeTrail : BasePlugin
 
     public override void Load(bool hotReload)
     {
-        Console.WriteLine("CS2-GrenadeTrail Color Loaded");
+        Console.WriteLine("CS2-CustomTrailAndTracers Colored Loaded");
         //Managers
         EventManager = new EventManager(this);
         CommandsManager = new CommandsManager(this);
@@ -59,7 +60,7 @@ public class CS2_GrenadeTrail : BasePlugin
 
     public override void Unload(bool hotReload)
     {
-        Console.WriteLine("CS2-GrenadeTrail Color Unloaded!");
+        Console.WriteLine("CS2-CustomTrailAndTracers Colored Unloaded!");
     }
 
 }

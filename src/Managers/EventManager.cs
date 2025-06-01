@@ -20,14 +20,11 @@ namespace CS2_GrenadeTrail.Managers
 
         private void OnServerPrecache(ResourceManifest manifest)
         {
-            foreach (var particles in _plugin.modelParticles)
+            foreach (var particles in _plugin.modelParticles.Concat(_plugin.tracerParticles))
             {
                 manifest.AddResource(particles);
             }
-            foreach (var particles in _plugin.tracerParticles)
-            {
-                manifest.AddResource(particles);
-            }
+            //testing purposes - not needed tbh
             manifest.AddResource("models/chicken/chicken.vmdl");
         }
 
