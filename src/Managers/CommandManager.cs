@@ -4,11 +4,11 @@ using CounterStrikeSharp.API;
 using System.Drawing;
 
 
-namespace CS2_GrenadeTrail.Managers
+namespace CS2_CustomTrailAndTracers.Managers
 {
-    public class CommandsManager(CS2_GrenadeTrail plugin)
+    public class CommandsManager(CS2_CustomTrailAndTracers plugin)
     {
-        private readonly CS2_GrenadeTrail _plugin = plugin;
+        private readonly CS2_CustomTrailAndTracers _plugin = plugin;
         public void RegisterCommands()
         {
             _plugin.AddCommand("css_randomTrailColor", "Sets random color of trail", OnRandomColor);

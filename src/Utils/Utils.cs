@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
 
-namespace CS2_GrenadeTrail.Utils
+namespace CS2_CustomTrailAndTracers.Utils
 {
-    public class PluginUtilities(CS2_GrenadeTrail plugin)
+    public class PluginUtilities(CS2_CustomTrailAndTracers plugin)
     {
-        private readonly CS2_GrenadeTrail _plugin = plugin;
+        private readonly CS2_CustomTrailAndTracers _plugin = plugin;
 
         //Thanks K4ryuu https://discord.com/channels/1160907911501991946/1285282792619507815/1342485330934108221
         public static MemoryFunctionWithReturn<CParticleSystem, int, Vector, bool> SetControlPointValue { get; }

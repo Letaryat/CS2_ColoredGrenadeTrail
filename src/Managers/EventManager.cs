@@ -1,13 +1,13 @@
 ﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Utils;
-using CS2_GrenadeTrail.Utils;
+using CS2_CustomTrailAndTracers.Utils;
 
-namespace CS2_GrenadeTrail.Managers
+namespace CS2_CustomTrailAndTracers.Managers
 {
-    public class EventManager(CS2_GrenadeTrail plugin)
+    public class EventManager(CS2_CustomTrailAndTracers plugin)
     {
-        private readonly CS2_GrenadeTrail _plugin = plugin;
+        private readonly CS2_CustomTrailAndTracers _plugin = plugin;
         public void RegisterEvents()
         {
             //Listeners:

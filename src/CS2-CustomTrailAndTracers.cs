@@ -4,12 +4,12 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
 using CounterStrikeSharp.API.Modules.Utils;
-using CS2_GrenadeTrail.Managers;
-using CS2_GrenadeTrail.Utils;
+using CS2_CustomTrailAndTracers.Managers;
+using CS2_CustomTrailAndTracers.Utils;
 
-namespace CS2_GrenadeTrail;
+namespace CS2_CustomTrailAndTracers;
 
-public class CS2_GrenadeTrail : BasePlugin
+public class CS2_CustomTrailAndTracers : BasePlugin
 {
     public override string ModuleName => "CS2-CustomTrailAndTracers Colored";
 
@@ -18,12 +18,12 @@ public class CS2_GrenadeTrail : BasePlugin
     public readonly string[] projectiles = ["hegrenade_projectile", "flashbang_projectile", "smokegrenade_projectile", "decoy_projectile", "molotov_projectile"];
 
     public readonly string[] modelParticles = [
-        "particles/letaryat/grenadeTrail.vpcf",
-        "particles/letaryat/grenadeTrailBrokenColors.vpcf",
-        "particles/letaryat/grenadeLaserSoftTrail.vpcf",
-        "particles/letaryat/grenadeCrackTrail.vpcf",
-        "particles/letaryat/grenadeelectric.vpcf",
-        "particles/letaryat/grenadewater.vpcf",
+        "particles/letaryat_trails/grenadeTrail.vpcf",
+        "particles/letaryat_trails/grenadeTrailBrokenColors.vpcf",
+        "particles/letaryat_trails/grenadeLaserSoftTrail.vpcf",
+        "particles/letaryat_trails/grenadeCrackTrail.vpcf",
+        "particles/letaryat_trails/grenadeelectric.vpcf",
+        "particles/letaryat_trails/grenadewater.vpcf",
     ];
 
     public readonly string[] tracerParticles = [
