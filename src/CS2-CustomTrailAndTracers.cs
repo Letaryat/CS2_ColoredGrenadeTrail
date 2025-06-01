@@ -1,9 +1,5 @@
 ﻿using System.Drawing;
-using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Commands;
-using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
-using CounterStrikeSharp.API.Modules.Utils;
 using CS2_CustomTrailAndTracers.Managers;
 using CS2_CustomTrailAndTracers.Utils;
 
